@@ -20,5 +20,9 @@ def query(query: str) -> dict:
     )
     if res.status_code != 200:
         raise Exception("GitHub return invalid response: {}".format(res.status_code))
+    
+    data = res.json()
+    if data.get('errors') is not None:
+        raise Exception("API return error: {}", data['errors'])
 
-    return res.json()
+    return data['data']
