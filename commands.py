@@ -2,6 +2,7 @@ from terminaltables import AsciiTable
 
 from github import query
 from repository import current_repo
+from utils import str_shorten
 
 _QUERY_ISSUE_LIST = """
 query {{
@@ -28,7 +29,7 @@ def issue():
         res = query(_QUERY_ISSUE_LIST.format(repo.owner, repo.name))
         nodes = res['data']['repository']['issues']['nodes']
 
-        table = list(map(lambda n: [n['number'], n['title'], n['updatedAt']], nodes))
+        table = list(map(lambda n: [n['number'], str_shorten(n['title'], 40), n['updatedAt']], nodes))
         table.insert(0, ['#', 'Title', 'Updated'])
         print(AsciiTable(table).table)
 
